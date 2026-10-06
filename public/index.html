@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🍺 Belgian Beer Tally - Devoxx Challenge</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      color: white;
+      margin-bottom: 30px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 1.1em;
+      opacity: 0.95;
+    }
+
+    .form-section {
+      background: white;
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 25px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+
+    .form-section h2 {
+      color: #d4a574;
+      margin-bottom: 15px;
+      font-size: 1.3em;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #333;
+      font-weight: 500;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 1em;
+      transition: border-color 0.3s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #ffd700;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #ffd700, #ff8c00);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.1em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .beers-section {
+      background: white;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+
+    .beers-section h2 {
+      color: #d4a574;
+      margin-bottom: 20px;
+      font-size: 1.3em;
+    }
+
+    .counter {
+      text-align: center;
+      font-size: 1.2em;
+      color: #666;
+      margin-bottom: 20px;
+      padding: 10px;
+      background: #f5f5f5;
+      border-radius: 6px;
+    }
+
+    .counter .count {
+      font-size: 2em;
+      color: #ffd700;
+      font-weight: bold;
+    }
+
+    .beer-list {
+      list-style: none;
+    }
+
+    .beer-item {
+      background: #f9f9f9;
+      padding: 15px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      border-left: 4px solid #ffd700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: transform 0.2s;
+    }
+
+    .beer-item:hover {
+      transform: translateX(5px);
+    }
+
+    .beer-info {
+      flex: 1;
+    }
+
+    .beer-name {
+      font-weight: bold;
+      color: #333;
+      font-size: 1.05em;
+    }
+
+    .beer-details {
+      font-size: 0.9em;
+      color: #666;
+      margin-top: 5px;
+    }
+
+    .delete-btn {
+      background: #ff6b6b;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9em;
+      transition: background 0.2s;
+    }
+
+    .delete-btn:hover {
+      background: #ff5252;
+    }
+
+    .empty-message {
+      text-align: center;
+      color: #999;
+      padding: 30px;
+      font-size: 1.1em;
+    }
+
+    .flag {
+      font-size: 1.3em;
+      margin-right: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🍺 Belgian Beer Tally</h1>
+      <p class="subtitle">Track your Belgian beer discoveries at Devoxx</p>
+    </header>
+
+    <div class="form-section">
+      <h2>Add a Beer</h2>
+      <form id="beerForm">
+        <div class="form-group">
+          <label for="beerName">Beer Name *</label>
+          <input type="text" id="beerName" name="name" placeholder="e.g., Trappist Westvleteren" required>
+        </div>
+        <div class="form-group">
+          <label for="beerBrewery">Brewery</label>
+          <input type="text" id="beerBrewery" name="brewery" placeholder="e.g., Sint Sixtus Abbey">
+        </div>
+        <div class="form-group">
+          <label for="beerABV">ABV (%)</label>
+          <input type="number" id="beerABV" name="abv" placeholder="8.5" step="0.1" min="0" max="15">
+        </div>
+        <button type="submit">🍻 Add to Tally</button>
+      </form>
+    </div>
+
+    <div class="beers-section">
+      <h2>Your Tally</h2>
+      <div class="counter">
+        <div>Beers tried</div>
+        <div class="count" id="count">0</div>
+      </div>
+      <ul class="beer-list" id="beerList">
+        <div class="empty-message">No beers yet. Add one to get started!</div>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = '/api';
+    const beerForm = document.getElementById('beerForm');
+    const beerList = document.getElementById('beerList');
+    const countDisplay = document.getElementById('count');
+
+    // Load beers on page load
+    loadBeers();
+
+    // Handle form submission
+    beerForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById('beerName').value.trim();
+      const brewery = document.getElementById('beerBrewery').value.trim();
+      const abv = document.getElementById('beerABV').value;
+
+      if (!name) return;
+
+      try {
+        const response = await fetch(`${API_URL}/beers`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, brewery, abv: abv ? parseFloat(abv) : null })
+        });
+
+        if (response.ok) {
+          beerForm.reset();
+          await loadBeers();
+        } else {
+          alert('Failed to add beer');
+        }
+      } catch (err) {
+        console.error('Error adding beer:', err);
+        alert('Error adding beer');
+      }
+    });
+
+    async function loadBeers() {
+      try {
+        const response = await fetch(`${API_URL}/beers`);
+        const beers = await response.json();
+
+        beerList.innerHTML = '';
+        countDisplay.textContent = beers.length;
+
+        if (beers.length === 0) {
+          beerList.innerHTML = '<div class="empty-message">No beers yet. Add one to get started!</div>';
+          return;
+        }
+
+        beers.forEach((beer) => {
+          const li = document.createElement('li');
+          li.className = 'beer-item';
+
+          const details = [];
+          if (beer.brewery) details.push(`🏭 ${beer.brewery}`);
+          if (beer.abv) details.push(`🔥 ${beer.abv}%`);
+
+          li.innerHTML = `
+            <div class="beer-info">
+              <div class="beer-name"><span class="flag">🍺</span>${beer.name}</div>
+              <div class="beer-details">${details.join(' • ')}</div>
+            </div>
+            <button class="delete-btn" onclick="deleteBeer(${beer.id})">✕</button>
+          `;
+
+          beerList.appendChild(li);
+        });
+      } catch (err) {
+        console.error('Error loading beers:', err);
+      }
+    }
+
+    async function deleteBeer(id) {
+      if (!confirm('Remove this beer?')) return;
+
+      try {
+        const response = await fetch(`${API_URL}/beers/${id}`, { method: 'DELETE' });
+        if (response.ok) {
+          await loadBeers();
+        }
+      } catch (err) {
+        console.error('Error deleting beer:', err);
+      }
+    }
+  </script>
+</body>
+</html>
